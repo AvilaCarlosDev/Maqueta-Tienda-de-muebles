@@ -9,25 +9,20 @@
 import React from "react";
 import {
   Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  Typography,
   Box,
+  Typography,
   Button,
   IconButton,
   Card,
   CardMedia,
   CardContent,
   CardActions,
-  Divider,
+  Grid,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useCartStore } from "../store/cartStore";
-import { PayPalButtons } from "@paypal/react-paypal-js";
 
 /**
  * Props:
@@ -37,23 +32,6 @@ import { PayPalButtons } from "@paypal/react-paypal-js";
 const Cart = ({ isOpen, onClose }) => {
   // Obtener el estado y funciones del carrito desde el store
   const { items, removeItem, updateQuantity } = useCartStore();
-
-  /**
-   * Maneja el cambio de cantidad de un item en el carrito
-   * @param {number} itemId - ID del item a modificar
-   * @param {number} change - Cantidad a sumar/restar
-   */
-  const handleQuantityChange = (itemId, change) => {
-    const item = items.find((item) => item.id === itemId);
-    if (item) {
-      const newQuantity = item.quantity + change;
-      if (newQuantity > 0) {
-        updateQuantity(itemId, newQuantity);
-      } else {
-        removeItem(itemId);
-      }
-    }
-  };
 
   /**
    * Maneja el proceso de checkout
@@ -79,69 +57,79 @@ const Cart = ({ isOpen, onClose }) => {
       }}
     >
       <Box sx={{ p: 2 }}>
-        <Typography variant="h6" gutterBottom>
-          Carrito de Compras
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mb: 2,
+          }}
+        >
+          <Typography variant="h6">Carrito de Compras</Typography>
+          <IconButton onClick={onClose}>×</IconButton>
+        </Box>
+
         {items.length === 0 ? (
           <Typography>Tu carrito está vacío</Typography>
         ) : (
           <>
-            <List>
-              {/* Renderizar cada item del carrito */}
+            <Grid container spacing={2}>
               {items.map((item) => (
-                <Card key={item.id} sx={{ mb: 2 }}>
-                  {/* Imagen del producto */}
-                  <CardMedia
-                    component="img"
-                    height="140"
-                    image={item.image}
-                    alt={item.name}
-                  />
-                  {/* Información del producto */}
-                  <CardContent>
-                    <Typography variant="h6">{item.name}</Typography>
-                    <Typography color="text.secondary">
-                      ${item.price.toFixed(2)}
-                    </Typography>
-                  </CardContent>
-                  {/* Controles de cantidad y eliminación */}
-                  <CardActions>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Grid item xs={12} key={item.id}>
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      height="140"
+                      image={item.image}
+                      alt={item.name}
+                    />
+                    <CardContent>
+                      <Typography variant="h6">{item.name}</Typography>
+                      <Typography color="text.secondary">
+                        ${item.price.toFixed(2)}
+                      </Typography>
+                    </CardContent>
+                    <CardActions>
                       <IconButton
                         size="small"
-                        onClick={() => handleQuantityChange(item.id, -1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
                       >
                         <RemoveIcon />
                       </IconButton>
                       <Typography>{item.quantity}</Typography>
                       <IconButton
                         size="small"
-                        onClick={() => handleQuantityChange(item.id, 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                       >
                         <AddIcon />
                       </IconButton>
-                    </Box>
-                    <IconButton
-                      color="error"
-                      onClick={() => removeItem(item.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
+                      <IconButton
+                        size="small"
+                        color="error"
+                        onClick={() => removeItem(item.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                </Grid>
               ))}
-            </List>
-            <Divider sx={{ my: 2 }} />
-            {/* Total y botones de acción */}
-            <Box sx={{ mb: 2 }}>
+            </Grid>
+
+            <Box sx={{ mt: 2 }}>
               <Typography variant="h6">Total: ${total.toFixed(2)}</Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button variant="outlined" fullWidth onClick={onClose}>
-                Seguir Comprando
-              </Button>
-              <Button variant="contained" fullWidth onClick={handleCheckout}>
-                Pagar
+              <Button
+                variant="contained"
+                color="primary"
+                fullWidth
+                onClick={handleCheckout}
+                sx={{ mt: 2 }}
+              >
+                Proceder al Pago
               </Button>
             </Box>
           </>
