@@ -1,129 +1,125 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Drawer,
   List,
   ListItem,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
+  ListItemButton,
+  ListItemIcon,
   Typography,
-  Button,
   Box,
-  Divider,
+  Button,
+  IconButton,
   Card,
   CardMedia,
+  CardContent,
+  CardActions,
+  Divider,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useCartStore } from "../store/cartStore";
-import CheckoutForm from "./CheckoutForm";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 const Cart = ({ isOpen, onClose }) => {
-  const { items, removeItem, getTotal, addItem, updateQuantity } =
-    useCartStore();
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const { items, removeItem, updateQuantity } = useCartStore();
 
-  const handleCheckout = () => {
-    setIsCheckoutOpen(true);
+  const handleQuantityChange = (itemId, change) => {
+    const item = items.find((item) => item.id === itemId);
+    if (item) {
+      const newQuantity = item.quantity + change;
+      if (newQuantity > 0) {
+        updateQuantity(itemId, newQuantity);
+      } else {
+        removeItem(itemId);
+      }
+    }
   };
 
+  const handleCheckout = () => {
+    // Aquí implementaremos la lógica de pago
+    console.log("Proceder al pago");
+  };
+
+  const total = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
   return (
-    <>
-      <Drawer
-        anchor="right"
-        open={isOpen}
-        onClose={onClose}
-        PaperProps={{
-          sx: { width: 400 },
-        }}
-      >
-        <Box sx={{ p: 2 }}>
-          <Typography variant="h6">Carrito de Compras</Typography>
-          <Divider sx={{ my: 2 }} />
-          <List>
-            {items.map((item) => (
-              <ListItem key={item.id}>
-                <Card sx={{ width: "100%", display: "flex", mb: 1 }}>
+    <Drawer
+      anchor="right"
+      open={isOpen}
+      onClose={onClose}
+      PaperProps={{
+        sx: { width: { xs: "100%", sm: 400 } },
+      }}
+    >
+      <Box sx={{ p: 2 }}>
+        <Typography variant="h6" gutterBottom>
+          Carrito de Compras
+        </Typography>
+        {items.length === 0 ? (
+          <Typography>Tu carrito está vacío</Typography>
+        ) : (
+          <>
+            <List>
+              {items.map((item) => (
+                <Card key={item.id} sx={{ mb: 2 }}>
                   <CardMedia
                     component="img"
-                    sx={{ width: 100 }}
+                    height="140"
                     image={item.image}
                     alt={item.name}
                   />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      flex: 1,
-                      p: 1,
-                    }}
-                  >
-                    <Typography variant="subtitle1">{item.name}</Typography>
-                    <Typography variant="body2" color="text.secondary">
+                  <CardContent>
+                    <Typography variant="h6">{item.name}</Typography>
+                    <Typography color="text.secondary">
                       ${item.price.toFixed(2)}
                     </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mt: 1,
-                        gap: 1,
-                      }}
-                    >
+                  </CardContent>
+                  <CardActions>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                       <IconButton
                         size="small"
-                        onClick={() =>
-                          updateQuantity(
-                            item.id,
-                            Math.max(1, item.quantity - 1)
-                          )
-                        }
+                        onClick={() => handleQuantityChange(item.id, -1)}
                       >
                         <RemoveIcon />
                       </IconButton>
                       <Typography>{item.quantity}</Typography>
                       <IconButton
                         size="small"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
+                        onClick={() => handleQuantityChange(item.id, 1)}
                       >
                         <AddIcon />
                       </IconButton>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => removeItem(item.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
                     </Box>
-                  </Box>
+                    <IconButton
+                      color="error"
+                      onClick={() => removeItem(item.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </CardActions>
                 </Card>
-              </ListItem>
-            ))}
-          </List>
-          <Divider sx={{ my: 2 }} />
-          <Typography variant="h6" sx={{ mb: 2 }}>
-            Total: ${getTotal().toFixed(2)}
-          </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            fullWidth
-            onClick={handleCheckout}
-            disabled={items.length === 0}
-          >
-            Proceder al Pago
-          </Button>
-        </Box>
-      </Drawer>
-      <CheckoutForm
-        open={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-      />
-    </>
+              ))}
+            </List>
+            <Divider sx={{ my: 2 }} />
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6">Total: ${total.toFixed(2)}</Typography>
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button variant="outlined" fullWidth onClick={onClose}>
+                Seguir Comprando
+              </Button>
+              <Button variant="contained" fullWidth onClick={handleCheckout}>
+                Pagar
+              </Button>
+            </Box>
+          </>
+        )}
+      </Box>
+    </Drawer>
   );
 };
 
