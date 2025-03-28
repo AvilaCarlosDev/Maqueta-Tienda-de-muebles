@@ -1,294 +1,291 @@
+/**
+ * Página de Categorías
+ *
+ * Este componente muestra los productos organizados por categorías.
+ * Permite filtrar productos por categoría y ver detalles de cada producto.
+ * Incluye un sistema de pestañas para navegación entre categorías.
+ */
+
 import React, { useState, useEffect } from "react";
 import {
   Container,
+  Typography,
   Grid,
   Card,
-  CardContent,
   CardMedia,
-  Typography,
+  CardContent,
+  CardActions,
   Button,
-  Box,
   Tabs,
   Tab,
+  Box,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
 import { useCartStore } from "../store/cartStore";
 import ProductDetails from "../components/ProductDetails";
+import { useLocation } from "react-router-dom";
 
-const categories = [
-  {
-    id: "muebles",
-    name: "Muebles",
-    products: [
-      {
-        id: 1,
-        name: "Sofá Moderno",
-        price: 599.99,
-        image:
-          "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Sofá moderno de 3 plazas con diseño minimalista",
-      },
-      {
-        id: 2,
-        name: "Armario Ropero",
-        price: 799.99,
-        image:
-          "https://images.unsplash.com/photo-1617806118233-18e1de247200?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Armario ropero con espejo y múltiples compartimentos",
-      },
-      {
-        id: 3,
-        name: "Cama King Size",
-        price: 899.99,
-        image:
-          "https://images.unsplash.com/photo-1505693314120-0d443867891c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Cama king size con cabecero tapizado",
-      },
-    ],
-  },
-  {
-    id: "mesas",
-    name: "Mesas",
-    products: [
-      {
-        id: 4,
-        name: "Mesa de Centro",
-        price: 299.99,
-        image:
-          "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Mesa de centro de madera maciza con acabado elegante",
-      },
-      {
-        id: 5,
-        name: "Mesa de Comedor",
-        price: 499.99,
-        image:
-          "https://images.unsplash.com/photo-1617806118233-18e1de247200?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Mesa de comedor extensible para 6-8 personas",
-      },
-      {
-        id: 6,
-        name: "Mesa de Trabajo",
-        price: 399.99,
-        image:
-          "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Mesa de trabajo con cajones y estantes",
-      },
-    ],
-  },
-  {
-    id: "sillas",
-    name: "Sillas",
-    products: [
-      {
-        id: 7,
-        name: "Silla de Oficina",
-        price: 199.99,
-        image:
-          "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
-        description: "Silla ergonómica con soporte lumbar ajustable",
-      },
-      {
-        id: 8,
-        name: "Silla de Comedor",
-        price: 149.99,
-        image:
-          "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Silla de comedor con tapizado elegante",
-      },
-      {
-        id: 9,
-        name: "Silla Acapulco",
-        price: 249.99,
-        image:
-          "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80",
-        description: "Silla acapulco con diseño retro",
-      },
-    ],
-  },
-  {
-    id: "cuadros",
-    name: "Cuadros",
-    products: [
-      {
-        id: 10,
-        name: "Cuadro Abstracto",
-        price: 89.99,
-        image:
-          "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Cuadro abstracto con colores modernos",
-      },
-      {
-        id: 11,
-        name: "Cuadro Paisaje",
-        price: 129.99,
-        image:
-          "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Cuadro de paisaje natural",
-      },
-      {
-        id: 12,
-        name: "Cuadro Minimalista",
-        price: 79.99,
-        image:
-          "https://images.unsplash.com/photo-1541961017774-22349e4a1262?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80",
-        description: "Cuadro minimalista en blanco y negro",
-      },
-    ],
-  },
-  {
-    id: "espejos",
-    name: "Espejos",
-    products: [
-      {
-        id: 13,
-        name: "Espejo de Pared",
-        price: 159.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Espejo de pared con marco dorado",
-      },
-      {
-        id: 14,
-        name: "Espejo de Piso",
-        price: 199.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Espejo de piso con diseño moderno",
-      },
-      {
-        id: 15,
-        name: "Espejo Decorativo",
-        price: 129.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Espejo decorativo con marco de madera",
-      },
-    ],
-  },
-  {
-    id: "alfombras",
-    name: "Alfombras",
-    products: [
-      {
-        id: 16,
-        name: "Alfombra Persa",
-        price: 299.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Alfombra persa con diseño tradicional",
-      },
-      {
-        id: 17,
-        name: "Alfombra Moderna",
-        price: 199.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Alfombra moderna con patrón geométrico",
-      },
-      {
-        id: 18,
-        name: "Alfombra Minimalista",
-        price: 149.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Alfombra minimalista en tonos neutros",
-      },
-    ],
-  },
-  {
-    id: "almohadas",
-    name: "Almohadas",
-    products: [
-      {
-        id: 19,
-        name: "Almohada Decorativa",
-        price: 39.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Almohada decorativa con estampado floral",
-      },
-      {
-        id: 20,
-        name: "Almohada de Soportes",
-        price: 49.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Almohada ergonómica para soporte lumbar",
-      },
-      {
-        id: 21,
-        name: "Almohada de Diseño",
-        price: 59.99,
-        image:
-          "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2080&q=80",
-        description: "Almohada con diseño moderno y textura única",
-      },
-    ],
-  },
-];
+/**
+ * Datos de productos organizados por categoría
+ * Cada categoría contiene un array de productos con sus propiedades
+ */
+const productsByCategory = {
+  muebles: [
+    {
+      id: 1,
+      name: "Sofá Moderno 3 Plazas",
+      description: "Sofá elegante con diseño contemporáneo y máxima comodidad",
+      price: 599.99,
+      image:
+        "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&auto=format&fit=crop&q=60",
+      category: "muebles",
+    },
+    {
+      id: 2,
+      name: "Sofá Seccional L",
+      description: "Sofá seccional en forma de L con chaise lounge",
+      price: 899.99,
+      image:
+        "https://images.unsplash.com/photo-1550254478-ead40cc54513?w=800&auto=format&fit=crop&q=60",
+      category: "muebles",
+    },
+    {
+      id: 3,
+      name: "Sofá Chesterfield",
+      description: "Sofá clásico con diseño victoriano y detalles en cuero",
+      price: 1299.99,
+      image:
+        "https://images.unsplash.com/photo-1550254478-ead40cc54513?w=800&auto=format&fit=crop&q=60",
+      category: "muebles",
+    },
+  ],
+  mesas: [
+    {
+      id: 4,
+      name: "Mesa de Centro Moderna",
+      description: "Mesa de centro con diseño minimalista y acabado en mármol",
+      price: 299.99,
+      image:
+        "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&auto=format&fit=crop&q=60",
+      category: "mesas",
+    },
+    {
+      id: 5,
+      name: "Mesa de Comedor",
+      description: "Mesa de comedor extensible para 6-8 personas",
+      price: 499.99,
+      image:
+        "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&auto=format&fit=crop&q=60",
+      category: "mesas",
+    },
+    {
+      id: 6,
+      name: "Mesa de Café",
+      description: "Mesa de café con diseño industrial",
+      price: 199.99,
+      image:
+        "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?w=800&auto=format&fit=crop&q=60",
+      category: "mesas",
+    },
+  ],
+  sillas: [
+    {
+      id: 7,
+      name: "Silla de Oficina Ergonómica",
+      description: "Silla ergonómica con soporte lumbar y reposacabezas",
+      price: 199.99,
+      image:
+        "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&auto=format&fit=crop&q=60",
+      category: "sillas",
+    },
+    {
+      id: 8,
+      name: "Silla de Comedor",
+      description: "Silla de comedor con diseño escandinavo",
+      price: 149.99,
+      image:
+        "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&auto=format&fit=crop&q=60",
+      category: "sillas",
+    },
+    {
+      id: 9,
+      name: "Silla Acapulco",
+      description: "Silla de exterior con diseño retro",
+      price: 179.99,
+      image:
+        "https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=800&auto=format&fit=crop&q=60",
+      category: "sillas",
+    },
+  ],
+  cuadros: [
+    {
+      id: 10,
+      name: "Cuadro Abstracto Moderno",
+      description: "Cuadro decorativo con arte abstracto contemporáneo",
+      price: 89.99,
+      image:
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&auto=format&fit=crop&q=60",
+      category: "cuadros",
+    },
+    {
+      id: 11,
+      name: "Cuadro Paisaje",
+      description: "Cuadro con paisaje natural en estilo impresionista",
+      price: 129.99,
+      image:
+        "https://images.unsplash.com/photo-1541961017774-22349e4a1262?w=800&auto=format&fit=crop&q=60",
+      category: "cuadros",
+    },
+  ],
+  espejos: [
+    {
+      id: 12,
+      name: "Espejo de Pared Moderno",
+      description: "Espejo decorativo con marco dorado",
+      price: 159.99,
+      image:
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=60",
+      category: "espejos",
+    },
+    {
+      id: 13,
+      name: "Espejo de Piso",
+      description: "Espejo de cuerpo completo con marco elegante",
+      price: 299.99,
+      image:
+        "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&auto=format&fit=crop&q=60",
+      category: "espejos",
+    },
+  ],
+  alfombras: [
+    {
+      id: 14,
+      name: "Alfombra Persa",
+      description: "Alfombra persa tradicional con diseño oriental",
+      price: 399.99,
+      image:
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&auto=format&fit=crop&q=60",
+      category: "alfombras",
+    },
+    {
+      id: 15,
+      name: "Alfombra Moderna",
+      description: "Alfombra contemporánea con diseño geométrico",
+      price: 249.99,
+      image:
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&auto=format&fit=crop&q=60",
+      category: "alfombras",
+    },
+  ],
+  almohadas: [
+    {
+      id: 16,
+      name: "Almohada Decorativa",
+      description: "Almohada decorativa con estampado floral",
+      price: 39.99,
+      image:
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&auto=format&fit=crop&q=60",
+      category: "almohadas",
+    },
+    {
+      id: 17,
+      name: "Cojín de Sillón",
+      description: "Cojín ergonómico para sillas y sillones",
+      price: 29.99,
+      image:
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&auto=format&fit=crop&q=60",
+      category: "almohadas",
+    },
+  ],
+};
 
+/**
+ * Componente principal de Categorías
+ */
 const Categories = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  const [selectedCategory, setSelectedCategory] = useState(0);
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const location = useLocation();
+  const [selectedCategory, setSelectedCategory] = useState("muebles");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const addItem = useCartStore((state) => state.addItem);
+  const { addItem } = useCartStore();
 
+  /**
+   * Efecto para manejar la navegación por hash
+   * Permite acceder directamente a una categoría específica
+   */
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
-      const categoryIndex = categories.findIndex((cat) => cat.id === hash);
-      if (categoryIndex !== -1) {
-        setSelectedCategory(categoryIndex);
-      }
+      setSelectedCategory(hash);
     }
-  }, []);
+  }, [location.hash]);
 
-  const handleOpenDetails = (product) => {
-    setSelectedProduct(product);
-    setIsDetailsOpen(true);
+  /**
+   * Maneja el cambio de categoría
+   * @param {Object} event - Evento del cambio de pestaña
+   * @param {string} newValue - Nueva categoría seleccionada
+   */
+  const handleCategoryChange = (event, newValue) => {
+    setSelectedCategory(newValue);
+    window.location.hash = newValue;
   };
 
+  /**
+   * Maneja la selección de un producto para ver sus detalles
+   * @param {Object} product - Producto seleccionado
+   */
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+  };
+
+  /**
+   * Cierra el diálogo de detalles del producto
+   */
   const handleCloseDetails = () => {
-    setIsDetailsOpen(false);
     setSelectedProduct(null);
   };
 
+  /**
+   * Maneja la adición de un producto al carrito
+   * @param {Object} product - Producto a agregar al carrito
+   */
+  const handleAddToCart = (product) => {
+    addItem(product);
+    handleCloseDetails();
+  };
+
   return (
-    <Container sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Nuestros Productos
-      </Typography>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      {/* Título de la página - solo se muestra cuando se accede directamente */}
+      {!location.hash && (
+        <Typography variant="h4" component="h1" gutterBottom>
+          Categorías
+        </Typography>
+      )}
+
+      {/* Pestañas de categorías */}
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 4 }}>
         <Tabs
           value={selectedCategory}
-          onChange={(e, newValue) => setSelectedCategory(newValue)}
+          onChange={handleCategoryChange}
           variant={isMobile ? "scrollable" : "standard"}
           scrollButtons={isMobile ? "auto" : false}
-          allowScrollButtonsMobile
-          sx={{
-            "& .MuiTabs-scrollButtons": {
-              display: isMobile ? "block" : "none",
-            },
-          }}
         >
-          {categories.map((category) => (
+          {Object.keys(productsByCategory).map((category) => (
             <Tab
-              key={category.id}
-              label={category.name}
-              sx={{
-                minWidth: isMobile ? "auto" : 160,
-                px: isMobile ? 2 : 3,
-              }}
+              key={category}
+              label={category.charAt(0).toUpperCase() + category.slice(1)}
+              value={category}
             />
           ))}
         </Tabs>
       </Box>
-      <Grid container spacing={3}>
-        {categories[selectedCategory].products.map((product) => (
+
+      {/* Grid de productos */}
+      <Grid container spacing={4}>
+        {productsByCategory[selectedCategory].map((product) => (
           <Grid item key={product.id} xs={12} sm={6} md={4}>
             <Card
               sx={{
@@ -297,64 +294,53 @@ const Categories = () => {
                 flexDirection: "column",
                 transition: "transform 0.2s",
                 "&:hover": {
-                  transform: "translateY(-5px)",
+                  transform: "scale(1.02)",
                 },
               }}
             >
+              {/* Imagen del producto */}
               <CardMedia
                 component="img"
-                height={isMobile ? "200" : "300"}
+                height="200"
                 image={product.image}
                 alt={product.name}
                 sx={{ objectFit: "cover" }}
               />
+              {/* Información del producto */}
               <CardContent sx={{ flexGrow: 1 }}>
-                <Typography gutterBottom variant="h5" component="h3">
+                <Typography gutterBottom variant="h6" component="h2">
                   {product.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" paragraph>
+                <Typography color="text.secondary">
                   {product.description}
                 </Typography>
-                <Typography variant="h6" color="primary" gutterBottom>
+                <Typography variant="h6" color="primary" sx={{ mt: 2 }}>
                   ${product.price.toFixed(2)}
                 </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 1,
-                    flexDirection: isMobile ? "column" : "row",
-                  }}
-                >
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => addItem(product)}
-                  >
-                    Agregar al Carrito
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handleOpenDetails(product)}
-                  >
-                    Ver Detalles
-                  </Button>
-                </Box>
               </CardContent>
+              {/* Botones de acción */}
+              <CardActions>
+                <Button
+                  size="small"
+                  color="primary"
+                  onClick={() => handleProductClick(product)}
+                  fullWidth
+                >
+                  Ver más detalles
+                </Button>
+              </CardActions>
             </Card>
           </Grid>
         ))}
       </Grid>
 
-      {selectedProduct && (
-        <ProductDetails
-          product={selectedProduct}
-          open={isDetailsOpen}
-          onClose={handleCloseDetails}
-        />
-      )}
+      {/* Diálogo de detalles del producto */}
+      <ProductDetails
+        product={selectedProduct}
+        open={!!selectedProduct}
+        onClose={handleCloseDetails}
+        onAddToCart={handleAddToCart}
+      />
     </Container>
   );
 };

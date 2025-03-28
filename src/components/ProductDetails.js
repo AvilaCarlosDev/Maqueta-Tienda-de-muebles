@@ -10,13 +10,17 @@ import {
   Grid,
   IconButton,
   Paper,
+  CardMedia,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useCartStore } from "../store/cartStore";
 
-const ProductDetails = ({ product, open, onClose }) => {
+const ProductDetails = ({ product, open, onClose, onAddToCart }) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const addItem = useCartStore((state) => state.addItem);
+
+  // Si no hay producto, no renderizar nada
+  if (!product) return null;
 
   const images = [
     product.image,
@@ -33,7 +37,18 @@ const ProductDetails = ({ product, open, onClose }) => {
   ];
 
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="md"
+      fullWidth
+      PaperProps={{
+        sx: {
+          borderRadius: 2,
+          overflow: "hidden",
+        },
+      }}
+    >
       <DialogTitle>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h5">{product.name}</Typography>
@@ -43,49 +58,32 @@ const ProductDetails = ({ product, open, onClose }) => {
         </Box>
       </DialogTitle>
       <DialogContent>
-        <Grid container spacing={3}>
-          {/* Imágenes */}
-          <Grid item xs={12} md={6}>
-            <Box sx={{ mb: 2 }}>
-              <img
-                src={images[selectedImage]}
-                alt={product.name}
-                style={{
-                  width: "100%",
-                  height: "400px",
-                  objectFit: "cover",
-                  borderRadius: "8px",
-                }}
-              />
-            </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              {images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt={`${product.name} ${index + 1}`}
-                  style={{
-                    width: "80px",
-                    height: "80px",
-                    objectFit: "cover",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    border:
-                      selectedImage === index ? "2px solid #1976d2" : "none",
-                  }}
-                  onClick={() => setSelectedImage(index)}
-                />
-              ))}
-            </Box>
-          </Grid>
-
-          {/* Información */}
-          <Grid item xs={12} md={6}>
-            <Typography variant="h4" color="primary" gutterBottom>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", md: "row" },
+            gap: 3,
+          }}
+        >
+          <CardMedia
+            component="img"
+            sx={{
+              width: { xs: "100%", md: "50%" },
+              height: { xs: 300, md: 400 },
+              objectFit: "cover",
+            }}
+            image={product.image}
+            alt={product.name}
+          />
+          <Box sx={{ flex: 1 }}>
+            <Typography variant="h6" color="primary" gutterBottom>
               ${product.price.toFixed(2)}
             </Typography>
             <Typography variant="body1" paragraph>
               {product.description}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Categoría: {product.category}
             </Typography>
 
             <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
@@ -103,8 +101,8 @@ const ProductDetails = ({ product, open, onClose }) => {
                 </Grid>
               ))}
             </Grid>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cerrar</Button>
@@ -112,7 +110,7 @@ const ProductDetails = ({ product, open, onClose }) => {
           variant="contained"
           color="primary"
           onClick={() => {
-            addItem(product);
+            onAddToCart(product);
             onClose();
           }}
         >
