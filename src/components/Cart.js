@@ -23,6 +23,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { useCartStore } from "../store/cartStore";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 
 /**
  * Props:
@@ -31,21 +32,25 @@ import { useCartStore } from "../store/cartStore";
  */
 const Cart = ({ isOpen, onClose }) => {
   // Obtener el estado y funciones del carrito desde el store
-  const { items, removeItem, updateQuantity } = useCartStore();
-
-  /**
-   * Maneja el proceso de checkout
-   * TODO: Implementar la lógica de pago con PayPal
-   */
-  const handleCheckout = () => {
-    console.log("Proceder al pago");
-  };
+  const { items, removeItem, updateQuantity, clearCart } = useCartStore();
 
   // Calcular el total del carrito
   const total = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  /**
+   * Maneja el proceso de checkout
+   * @param {Object} data - Datos de la transacción de PayPal
+   */
+  const handleCheckout = (data) => {
+    if (data.status === "COMPLETED") {
+      clearCart();
+      onClose();
+      alert("¡Pago realizado con éxito! Gracias por tu compra.");
+    }
+  };
 
   return (
     <Drawer
@@ -122,15 +127,36 @@ const Cart = ({ isOpen, onClose }) => {
 
             <Box sx={{ mt: 2 }}>
               <Typography variant="h6">Total: ${total.toFixed(2)}</Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                onClick={handleCheckout}
-                sx={{ mt: 2 }}
-              >
-                Proceder al Pago
-              </Button>
+              <PayPalButtons
+                createOrder={(data, actions) => {
+                  return actions.order.create({
+                    purchase_units: [
+                      {
+                        amount: {
+                          value: total.toFixed(2),
+                          currency_code: "USD",
+                        },
+                        description: "Compra en Muebles Punto Fijo",
+                      },
+                    ],
+                  });
+                }}
+                onApprove={(data, actions) => {
+                  return actions.order.capture().then((details) => {
+                    handleCheckout(details);
+                  });
+                }}
+                onError={(err) => {
+                  console.error("Error en el pago:", err);
+                  alert(
+                    "Hubo un error al procesar el pago. Por favor, intenta nuevamente."
+                  );
+                }}
+                style={{ layout: "vertical" }}
+                options={{
+                  clientId: process.env.REACT_APP_PAYPAL_CLIENT_ID,
+                }}
+              />
             </Box>
           </>
         )}
