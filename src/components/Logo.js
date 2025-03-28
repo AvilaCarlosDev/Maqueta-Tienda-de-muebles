@@ -1,52 +1,93 @@
 /**
  * Componente Logo - Logo de la Tienda
  *
- * Este componente muestra el logo de la tienda con un icono y texto.
- * Es reutilizable y puede variar su tamaño y color según las props recibidas.
+ * Este componente muestra el logo de la tienda con texto escalable.
+ * El logo consta de tres partes:
+ * - MPF: Texto principal
+ * - MUEBLES: Subtítulo superior
+ * - PUNTO FIJO: Subtítulo inferior
  */
 
 import React from "react";
-import { Box, Typography } from "@mui/material";
-import ChairIcon from "@mui/icons-material/Chair";
+import { Box, SvgIcon } from "@mui/material";
+import { Link } from "react-router-dom";
 
-/**
- * Props:
- * @param {string} variant - Variante del logo ('small' | 'medium' | 'large')
- * @param {string} color - Color del logo (cualquier color válido de MUI)
- * @param {object} sx - Estilos adicionales para el componente
- */
-const Logo = ({ variant = "medium", color = "primary", sx = {} }) => {
-  // Definir tamaños según la variante
-  const sizes = {
-    small: { icon: 24, text: "h6" },
-    medium: { icon: 32, text: "h5" },
-    large: { icon: 48, text: "h4" },
-  };
-
+const Logo = ({ sx = {} }) => {
   return (
     <Box
+      component={Link}
+      to="/"
       sx={{
         display: "flex",
         alignItems: "center",
-        gap: 1,
+        textDecoration: "none",
         ...sx,
       }}
     >
-      <ChairIcon
+      <SvgIcon
+        viewBox="0 0 400 200"
         sx={{
-          fontSize: sizes[variant].icon,
-          color: `${color}.main`,
-        }}
-      />
-      <Typography
-        variant={sizes[variant].text}
-        sx={{
-          color: `${color}.main`,
-          fontWeight: "bold",
+          width: 180,
+          height: 90,
+          "& .turquoise": {
+            fill: "#40E0D0",
+          },
+          "& .pink": {
+            fill: "#FF69B4",
+          },
         }}
       >
-        Muebles Punto Fijo
-      </Typography>
+        <g transform="translate(20, 20)">
+          {/* MPF */}
+          <text
+            x="50"
+            y="60"
+            className="turquoise"
+            style={{
+              fontSize: "72px",
+              fontWeight: "bold",
+              fontFamily: "Montserrat",
+            }}
+          >
+            MPF
+          </text>
+          {/* MUEBLES */}
+          <text
+            x="50"
+            y="95"
+            className="turquoise"
+            style={{
+              fontSize: "28px",
+              fontWeight: "bold",
+              fontFamily: "Montserrat",
+            }}
+          >
+            MUEBLES
+          </text>
+          {/* PUNTO FIJO */}
+          <text
+            x="50"
+            y="125"
+            className="pink"
+            style={{
+              fontSize: "28px",
+              fontWeight: "bold",
+              fontFamily: "Montserrat",
+            }}
+          >
+            PUNTO FIJO
+          </text>
+          {/* Línea decorativa */}
+          <line
+            x1="50"
+            y1="135"
+            x2="250"
+            y2="135"
+            stroke="#FF69B4"
+            strokeWidth="3"
+          />
+        </g>
+      </SvgIcon>
     </Box>
   );
 };

@@ -176,7 +176,13 @@ const Home = () => {
       </Container>
 
       {/* About Section */}
-      <Box sx={{ bgcolor: "grey.100", py: 8 }}>
+      <Box
+        sx={{
+          bgcolor: "background.default",
+          color: "text.primary",
+          py: 8,
+        }}
+      >
         <Container>
           <Grid container spacing={4} alignItems="center">
             <Grid item xs={12} md={6}>
@@ -194,38 +200,91 @@ const Home = () => {
               />
             </Grid>
             <Grid item xs={12} md={6}>
-              <Typography variant="h4" component="h2" gutterBottom>
+              <Typography
+                variant="h4"
+                component="h2"
+                gutterBottom
+                sx={{ color: "text.primary" }}
+              >
                 ¿Por qué elegirnos?
               </Typography>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
-                  <Paper sx={{ p: 2 }}>
-                    <Typography variant="h6" gutterBottom>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      p: 3,
+                      bgcolor: "background.paper",
+                      color: "text.primary",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: 8,
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ color: "primary.main" }}
+                    >
                       Calidad Superior
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ color: "text.primary" }}>
                       Todos nuestros muebles están fabricados con los mejores
                       materiales y acabados de alta calidad.
                     </Typography>
                   </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                  <Paper sx={{ p: 2 }}>
-                    <Typography variant="h6" gutterBottom>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      p: 3,
+                      bgcolor: "background.paper",
+                      color: "text.primary",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: 8,
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ color: "primary.main" }}
+                    >
                       Garantía
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ color: "text.primary" }}>
                       Ofrecemos garantía en todos nuestros productos para tu
                       tranquilidad.
                     </Typography>
                   </Paper>
                 </Grid>
                 <Grid item xs={12}>
-                  <Paper sx={{ p: 2 }}>
-                    <Typography variant="h6" gutterBottom>
+                  <Paper
+                    elevation={3}
+                    sx={{
+                      p: 3,
+                      bgcolor: "background.paper",
+                      color: "text.primary",
+                      transition: "all 0.3s ease",
+                      "&:hover": {
+                        transform: "translateY(-4px)",
+                        boxShadow: 8,
+                      },
+                    }}
+                  >
+                    <Typography
+                      variant="h6"
+                      gutterBottom
+                      sx={{ color: "primary.main" }}
+                    >
                       Envío Seguro
                     </Typography>
-                    <Typography>
+                    <Typography sx={{ color: "text.primary" }}>
                       Realizamos envíos seguros a todo el país con seguimiento
                       en tiempo real.
                     </Typography>

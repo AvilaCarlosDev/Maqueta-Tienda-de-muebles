@@ -1,86 +1,129 @@
+/**
+ * Componente Footer
+ *
+ * Pie de página responsivo que muestra:
+ * - Información de contacto (teléfono, email, WhatsApp)
+ * - Horario de atención
+ * - Enlaces rápidos
+ * - Derechos de autor
+ */
+
 import React from "react";
 import {
   Box,
   Container,
   Grid,
   Typography,
-  IconButton,
-  Tooltip,
+  Link,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
-import PayPalIcon from "@mui/icons-material/Payment";
-import AccountBalanceIcon from "@mui/icons-material/AccountBalance";
-import CurrencyBitcoinIcon from "@mui/icons-material/CurrencyBitcoin";
-import { SiZelle } from "react-icons/si";
+import PhoneIcon from "@mui/icons-material/Phone";
+import EmailIcon from "@mui/icons-material/Email";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 
 const Footer = () => {
-  const paymentMethods = [
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  // Información de contacto con sus respectivos iconos y enlaces
+  const contactInfo = [
     {
-      name: "PayPal",
-      icon: <PayPalIcon sx={{ fontSize: 40, color: "#0070BA" }} />,
-      description: "Pago seguro con PayPal",
+      icon: <PhoneIcon sx={{ mr: 1 }} />,
+      text: "+58 424-555-5555",
+      link: "tel:+584245555555",
     },
     {
-      name: "Zelle",
-      icon: <SiZelle size={40} color="#6DCDB8" />,
-      description: "Transferencia instantánea con Zelle",
+      icon: <EmailIcon sx={{ mr: 1 }} />,
+      text: "info@mpf.com",
+      link: "mailto:info@mpf.com",
     },
     {
-      name: "Transferencia Bancaria",
-      icon: <AccountBalanceIcon sx={{ fontSize: 40, color: "#1976d2" }} />,
-      description: "Transferencia bancaria directa",
-    },
-    {
-      name: "Criptomonedas",
-      icon: <CurrencyBitcoinIcon sx={{ fontSize: 40, color: "#F7931A" }} />,
-      description: "Pago con Bitcoin y otras criptomonedas",
+      icon: <WhatsAppIcon sx={{ mr: 1 }} />,
+      text: "WhatsApp",
+      link: "https://wa.me/584245555555",
     },
   ];
 
   return (
     <Box
       component="footer"
+      id="contacto"
       sx={{
-        bgcolor: "primary.main",
-        color: "white",
-        py: 6,
-        mt: "auto",
+        bgcolor: "background.paper",
+        py: 2,
+        borderTop: 1,
+        borderColor: "divider",
       }}
     >
-      <Container>
-        <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
+      <Container maxWidth="lg">
+        <Grid container spacing={2} justifyContent="space-between">
+          {/* Columna de Contacto */}
+          <Grid item xs={12} sm={6} md={4}>
             <Typography variant="h6" gutterBottom>
-              Muebles Punto Fijo
+              Contáctanos
             </Typography>
-            <Typography variant="body2">
-              Tu tienda de confianza para muebles de alta calidad. Transformamos
-              espacios con estilo y funcionalidad.
-            </Typography>
+            {contactInfo.map((info, index) => (
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  mb: 1,
+                }}
+              >
+                {info.icon}
+                <Link
+                  href={info.link}
+                  color="inherit"
+                  underline="hover"
+                  target={info.text === "WhatsApp" ? "_blank" : "_self"}
+                  rel={info.text === "WhatsApp" ? "noopener noreferrer" : ""}
+                >
+                  {info.text}
+                </Link>
+              </Box>
+            ))}
           </Grid>
-          <Grid item xs={12} md={6}>
+
+          {/* Columna de Horario */}
+          <Grid item xs={12} sm={6} md={4}>
             <Typography variant="h6" gutterBottom>
-              Métodos de Pago Aceptados
+              Horario
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-              {paymentMethods.map((method) => (
-                <Tooltip key={method.name} title={method.description}>
-                  <IconButton
-                    sx={{
-                      bgcolor: "rgba(255, 255, 255, 0.1)",
-                      "&:hover": {
-                        bgcolor: "rgba(255, 255, 255, 0.2)",
-                      },
-                    }}
-                  >
-                    {method.icon}
-                  </IconButton>
-                </Tooltip>
-              ))}
-            </Box>
+            <Typography variant="body2" paragraph>
+              Lunes a Viernes: 9:00 AM - 6:00 PM
+            </Typography>
+            <Typography variant="body2">Sábados: 9:00 AM - 2:00 PM</Typography>
           </Grid>
+
+          {/* Columna de Enlaces Rápidos */}
+          {!isMobile && (
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Enlaces Rápidos
+              </Typography>
+              <Link href="/" color="inherit" display="block" mb={1}>
+                Inicio
+              </Link>
+              <Link href="/categorias" color="inherit" display="block" mb={1}>
+                Categorías
+              </Link>
+              <Link href="/sobre-nosotros" color="inherit" display="block">
+                Sobre Nosotros
+              </Link>
+            </Grid>
+          )}
         </Grid>
-        <Typography variant="body2" align="center" sx={{ mt: 4, opacity: 0.8 }}>
-          © {new Date().getFullYear()} Muebles Punto Fijo. Todos los derechos
+
+        {/* Copyright */}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mt: 2 }}
+        >
+          © {new Date().getFullYear()} MPF Muebles. Todos los derechos
           reservados.
         </Typography>
       </Container>
