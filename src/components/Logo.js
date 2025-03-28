@@ -9,8 +9,9 @@
  */
 
 import React from "react";
-import { Box, SvgIcon } from "@mui/material";
+import { Box } from "@mui/material";
 import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.png"; // Ruta de la imagen
 
 const Logo = ({ sx = {} }) => {
   return (
@@ -24,70 +25,14 @@ const Logo = ({ sx = {} }) => {
         ...sx,
       }}
     >
-      <SvgIcon
-        viewBox="0 0 400 200"
-        sx={{
-          width: 180,
-          height: 90,
-          "& .turquoise": {
-            fill: "#40E0D0",
-          },
-          "& .pink": {
-            fill: "#FF69B4",
-          },
+      <img
+        src={logo}
+        alt="Logo de Muebles Punto Fijo"
+        style={{
+          width: "100px", // Tamaño reducido
+          height: "auto",
         }}
-      >
-        <g transform="translate(20, 20)">
-          {/* MPF */}
-          <text
-            x="50"
-            y="60"
-            className="turquoise"
-            style={{
-              fontSize: "72px",
-              fontWeight: "bold",
-              fontFamily: "Montserrat",
-            }}
-          >
-            MPF
-          </text>
-          {/* MUEBLES */}
-          <text
-            x="50"
-            y="95"
-            className="turquoise"
-            style={{
-              fontSize: "28px",
-              fontWeight: "bold",
-              fontFamily: "Montserrat",
-            }}
-          >
-            MUEBLES
-          </text>
-          {/* PUNTO FIJO */}
-          <text
-            x="50"
-            y="125"
-            className="pink"
-            style={{
-              fontSize: "28px",
-              fontWeight: "bold",
-              fontFamily: "Montserrat",
-            }}
-          >
-            PUNTO FIJO
-          </text>
-          {/* Línea decorativa */}
-          <line
-            x1="50"
-            y1="135"
-            x2="250"
-            y2="135"
-            stroke="#FF69B4"
-            strokeWidth="3"
-          />
-        </g>
-      </SvgIcon>
+      />
     </Box>
   );
 };
