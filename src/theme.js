@@ -10,7 +10,6 @@
 import { createTheme } from "@mui/material/styles";
 
 // Colores principales de la aplicación
-const TURQUOISE = "#40E0D0";
 const PINK = "#FF69B4";
 const BLUE = "#1976d2"; // Color azul para el header
 
