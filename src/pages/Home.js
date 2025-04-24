@@ -1,3 +1,8 @@
+// Copyright (c) 2024 AvilaCarlosDev
+// Licensed under the GPL-3.0 License
+// Firma: AvilaCarlosDev
+
+// ...resto del código...
 import React, { useState } from "react";
 import {
   Container,

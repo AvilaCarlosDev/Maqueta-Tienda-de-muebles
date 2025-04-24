@@ -6,7 +6,11 @@
  * - Horario de atención
  * - Enlaces rápidos
  * - Derechos de autor
- */
+ */ // Copyright (c) 2024 AvilaCarlosDev
+// Licensed under the GPL-3.0 License
+// Firma: AvilaCarlosDev
+
+// ...resto del código...
 
 import React from "react";
 import {
