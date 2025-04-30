@@ -56,11 +56,7 @@ const menuItems = [
   { text: "Inicio", path: "/", icon: <HomeIcon /> },
   { text: "Categorías", path: "/categorias", icon: <MenuIcon /> },
   { text: "Sobre Nosotros", path: "/sobre-nosotros", icon: <InfoIcon /> },
-  {
-    text: "Auditoría de Seguridad",
-    path: "/security-audit",
-    icon: <InfoIcon />,
-  },
+  // { text: "Auditoría de Seguridad", path: "/security-audit", icon: <InfoIcon /> }, // Eliminado
 ];
 
 const Navbar = ({ toggleTheme }) => {

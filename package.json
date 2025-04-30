@@ -8,11 +8,14 @@
     "@mui/icons-material": "^5.11.16",
     "@mui/material": "^5.13.0",
     "@paypal/react-paypal-js": "^7.8.1",
+    "@svgr/webpack": "^8.1.0",
+    "nth-check": "^2.0.1",
+    "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
     "react-router-dom": "^6.11.1",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "zustand": "^4.3.8"
   },
   "scripts": {

@@ -21,7 +21,6 @@ import Cart from "./components/Cart";
 import getTheme from "./theme";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Box, Typography } from "@mui/material";
-import SecurityAuditPage from "./pages/SecurityAuditPage";
 
 // Validar que las variables de entorno estén configuradas
 const validateEnvVariables = () => {
@@ -117,10 +116,7 @@ function App() {
                   <Route path="/" element={<Home />} />
                   <Route path="/categorias" element={<Categories />} />
                   <Route path="/sobre-nosotros" element={<About />} />
-                  <Route
-                    path="/security-audit"
-                    element={<SecurityAuditPage />}
-                  />
+                  <Route path="/security-audit" />
                 </Routes>
               </main>
               <Footer />
