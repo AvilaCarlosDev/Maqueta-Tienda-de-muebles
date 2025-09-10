@@ -1,6 +1,10 @@
-from flask import Flask, jsonify
-from flask_cors import CORS
+from flask import Flask, jsonify, request, make_response
 import os
+
+
+ALLOWED_ORIGINS = {"http://127.0.0.1:5173"}
+ALLOWED_METHODS = {"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+ALLOWED_HEADERS = {"Content-Type", "Authorization"}
 
 
 def create_app() -> Flask:
@@ -11,8 +15,32 @@ def create_app() -> Flask:
         JSON_SORT_KEYS=False,
     )
 
-    # CORS restringido al loopback para desarrollo
-    CORS(app, resources={r"/api/*": {"origins": ["http://127.0.0.1:5173"]}})
+    # Middleware CORS seguro sin dependencias externas
+    @app.after_request
+    def add_cors_headers(response):
+        origin = request.headers.get("Origin")
+        if origin in ALLOWED_ORIGINS:
+            response.headers["Access-Control-Allow-Origin"] = origin
+            response.headers["Vary"] = "Origin"
+            response.headers["Access-Control-Allow-Methods"] = ", ".join(sorted(ALLOWED_METHODS))
+            response.headers["Access-Control-Allow-Headers"] = ", ".join(sorted(ALLOWED_HEADERS))
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            # No se añade Access-Control-Allow-Private-Network por seguridad
+        return response
+
+    # Manejo explícito de preflight
+    @app.route('/api/<path:_any>', methods=['OPTIONS'])
+    def cors_preflight(_any):
+        origin = request.headers.get("Origin")
+        if origin in ALLOWED_ORIGINS:
+            resp = make_response("", 204)
+            resp.headers["Access-Control-Allow-Origin"] = origin
+            resp.headers["Vary"] = "Origin"
+            resp.headers["Access-Control-Allow-Methods"] = ", ".join(sorted(ALLOWED_METHODS))
+            resp.headers["Access-Control-Allow-Headers"] = ", ".join(sorted(ALLOWED_HEADERS))
+            resp.headers["Access-Control-Allow-Credentials"] = "true"
+            return resp
+        return make_response("", 204)
 
     @app.get('/api/health')
     def health():
