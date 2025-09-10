@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "muebles-punto-fijo-frontend": "file:.."
+  }
+}
