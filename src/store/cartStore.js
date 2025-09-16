@@ -4,6 +4,9 @@
  * Este store maneja el estado global del carrito de compras utilizando Zustand.
  * Proporciona funciones para agregar, eliminar y actualizar items en el carrito.
  * Incluye validaciones y sanitización de datos para mayor seguridad.
+ *
+ * Copyright (c) 2024 AvilaCarlosDev
+ * Licensed under the MIT License
  */
 
 import { create } from "zustand";
@@ -71,7 +74,7 @@ export const useCartStore = create((set, get) => ({
         };
       }
       return {
-        items: [...state.items, { ...sanitizedItem, quantity: 1 }],
+        items: [...state.items, sanitizedItem],
       };
     });
     return true;

@@ -52,7 +52,11 @@ const ProductDetails = ({ product, open, onClose }) => {
           variant="contained"
           color="primary"
           onClick={() => {
-            addItem(product);
+            const productWithQuantity = {
+              ...product,
+              quantity: 1,
+            };
+            addItem(productWithQuantity);
             onClose();
           }}
         >

@@ -1,3 +1,13 @@
+"""
+Backend API para Muebles Punto Fijo
+
+Este módulo proporciona una API REST simple con Flask para la tienda de muebles.
+Incluye configuración CORS segura y endpoints básicos.
+
+Copyright (c) 2024 AvilaCarlosDev
+Licensed under the MIT License
+"""
+
 from flask import Flask, jsonify, request, make_response
 import os
 

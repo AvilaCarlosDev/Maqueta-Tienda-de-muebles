@@ -6,6 +6,9 @@
  * - Enrutamiento principal
  * - Estructura básica de la aplicación (header, main, footer)
  * - Configuración segura de PayPal
+ *
+ * Copyright (c) 2024 AvilaCarlosDev
+ * Licensed under the MIT License
  */
 
 import React, { useState, useEffect } from "react";
@@ -121,7 +124,6 @@ function App() {
               </main>
               <Footer />
             </div>
-            <Cart />
           </Router>
         </PayPalScriptProvider>
       </ThemeProvider>

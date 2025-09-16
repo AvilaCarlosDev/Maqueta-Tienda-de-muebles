@@ -2,6 +2,9 @@
   "name": "muebles-punto-fijo",
   "version": "1.0.0",
   "private": true,
+  "author": "AvilaCarlosDev",
+  "license": "MIT",
+  "description": "Tienda online de muebles moderna y funcional construida con React y Material-UI",
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
@@ -19,7 +22,7 @@
     "zustand": "^4.3.8"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "set PORT=5500 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
