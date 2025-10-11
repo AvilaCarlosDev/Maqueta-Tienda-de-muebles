@@ -6,26 +6,27 @@
   "license": "MIT",
   "description": "Tienda online de muebles moderna y funcional construida con React y Material-UI",
   "dependencies": {
-    "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/material": "^5.13.0",
-    "@paypal/react-paypal-js": "^7.8.1",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mui/icons-material": "^7.3.4",
+    "@mui/material": "^7.3.4",
+    "@paypal/react-paypal-js": "^8.9.2",
     "@svgr/webpack": "^8.1.0",
     "nth-check": "^2.1.1",
     "postcss": "^8.5.6",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^6.11.1",
+    "react-router-dom": "^7.9.4",
     "react-scripts": "^5.0.1",
-    "zustand": "^4.3.8"
+    "zustand": "^5.0.8"
   },
   "scripts": {
     "start": "set PORT=5500 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "update-deps":"ncu -u && npm install"
   },
   "eslintConfig": {
     "extends": [
@@ -53,4 +54,6 @@
     "on-headers": "^1.1.0",
     "brace-expansion": "^4.0.1"
   }
+
+
 }
