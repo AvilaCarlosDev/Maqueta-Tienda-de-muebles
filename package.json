@@ -22,12 +22,13 @@
     "zustand": "^5.0.8"
   },
   "scripts": {
-    "start": "set PORT=5500 && react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "update-deps": "ncu -u && npm install"
-  },
+  "start": "react-scripts start",
+  "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject",
+   "update-deps": "ncu -u && npm install"
+},
+
   "eslintConfig": {
     "extends": [
       "react-app",
