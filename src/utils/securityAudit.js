@@ -138,7 +138,7 @@ class SecurityAudit {
    */
   async checkSensitiveData() {
     const checks = {
-      envVariables: process.env.REACT_APP_PAYPAL_CLIENT_ID ? true : false,
+      envVariables: process.env.VITE_PAYPAL_CLIENT_ID ? true : false,
       localStorage: true, // Esto debería verificarse en el código
       sessionStorage: true,
     };

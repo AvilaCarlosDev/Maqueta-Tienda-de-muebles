@@ -27,7 +27,7 @@ import { Box, Typography } from "@mui/material";
 
 // Validar que las variables de entorno estén configuradas
 const validateEnvVariables = () => {
-  const requiredVars = ["REACT_APP_PAYPAL_CLIENT_ID"];
+  const requiredVars = ["VITE_PAYPAL_CLIENT_ID"];
   const missingVars = requiredVars.filter((varName) => !process.env[varName]);
 
   if (missingVars.length > 0) {
@@ -73,7 +73,7 @@ function App() {
 
   // Configuración de PayPal con validaciones adicionales
   const paypalOptions = {
-    "client-id": process.env.REACT_APP_PAYPAL_CLIENT_ID,
+    "client-id": process.env.VITE_PAYPAL_CLIENT_ID,
     currency: "USD",
     intent: "capture",
     "disable-funding": "credit,card",
