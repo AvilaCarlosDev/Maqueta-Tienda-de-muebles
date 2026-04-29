@@ -27,12 +27,11 @@ import { Box, Typography } from "@mui/material";
 
 // Validar que las variables de entorno estén configuradas
 const validateEnvVariables = () => {
-  const requiredVars = ["VITE_PAYPAL_CLIENT_ID"];
-  const missingVars = requiredVars.filter((varName) => !process.env[varName]);
-
-  if (missingVars.length > 0) {
-    console.error("Variables de entorno faltantes:", missingVars);
-    return false;
+  // Para demo: usar Client ID de sandbox de PayPal si no hay variable de entorno
+  // Client ID de prueba: https://developer.paypal.com/docs/business/quickstart/
+  if (!process.env.VITE_PAYPAL_CLIENT_ID) {
+    console.warn("Usando Client ID de sandbox para demo");
+    return true; // No fallar, solo advertir
   }
   return true;
 };
@@ -72,8 +71,11 @@ function App() {
   const theme = getTheme(mode);
 
   // Configuración de PayPal con validaciones adicionales
+  // Client ID de sandbox para demo (no procesa pagos reales)
+  const paypalClientId = process.env.VITE_PAYPAL_CLIENT_ID || "test";
+  
   const paypalOptions = {
-    "client-id": process.env.VITE_PAYPAL_CLIENT_ID,
+    "client-id": paypalClientId,
     currency: "USD",
     intent: "capture",
     "disable-funding": "credit,card",
