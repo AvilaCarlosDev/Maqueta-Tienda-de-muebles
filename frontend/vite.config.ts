@@ -15,4 +15,15 @@ export default defineConfig({
     }
   },
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'ui-vendor': ['bootstrap', '@tabler/icons-react']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 2000
+  },
 })
