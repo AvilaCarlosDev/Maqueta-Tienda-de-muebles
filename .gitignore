@@ -31,3 +31,4 @@ yarn-error.log*
 .qodo
 # Windows reserved filename accidentally created
 NUL
+.vercel
