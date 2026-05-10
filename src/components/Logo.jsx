@@ -1,22 +1,11 @@
 /**
- * Componente Logo - Logo de la Tienda
- *
- * Este componente muestra el logo de la tienda con texto escalable.
- * El logo consta de tres partes:
- * - MPF: Texto principal
- * - MUEBLES: Subtítulo superior
- * - PUNTO FIJO: Subtítulo inferior
+ * Logo generado en código para la marca demo Renova Muebles Studio.
+ * No usa imagen externa: permite adaptar la identidad visual desde cero.
  */
-// Copyright (c) 2024 AvilaCarlosDev
-// Licensed under the GPL-3.0 License
-// Firma: AvilaCarlosDev
-
-// ...resto del código...
 
 import React from "react";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/logo.png"; // Ruta de la imagen
 
 const Logo = ({ sx = {} }) => {
   return (
@@ -26,18 +15,37 @@ const Logo = ({ sx = {} }) => {
       sx={{
         display: "flex",
         alignItems: "center",
+        gap: 1.4,
         textDecoration: "none",
+        color: "inherit",
         ...sx,
       }}
     >
-      <img
-        src={logo}
-        alt="Logo de Muebles Punto Fijo"
-        style={{
-          width: "100px", // Tamaño reducido
-          height: "auto",
+      <Box
+        sx={{
+          width: 46,
+          height: 46,
+          borderRadius: "18px 18px 10px 18px",
+          bgcolor: "#c46a3a",
+          color: "#fff7ed",
+          display: "grid",
+          placeItems: "center",
+          fontWeight: 950,
+          fontSize: 18,
+          letterSpacing: "-.04em",
+          boxShadow: "0 12px 28px rgba(196,106,58,.25)",
         }}
-      />
+      >
+        R
+      </Box>
+      <Box sx={{ lineHeight: 1 }}>
+        <Typography sx={{ fontWeight: 950, fontSize: { xs: 17, sm: 19 }, letterSpacing: "-.04em", color: "#fff" }}>
+          Renova
+        </Typography>
+        <Typography sx={{ mt: .35, fontSize: 10, fontWeight: 900, letterSpacing: ".16em", textTransform: "uppercase", color: "rgba(255,255,255,.72)" }}>
+          Muebles Studio
+        </Typography>
+      </Box>
     </Box>
   );
 };

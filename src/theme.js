@@ -9,9 +9,9 @@
 
 import { createTheme } from "@mui/material/styles";
 
-// Colores principales de la aplicación
-const PINK = "#FF69B4";
-const BLUE = "#1976d2"; // Color azul para el header
+// Colores principales de la marca demo Renova Muebles Studio
+const PINK = "#c46a3a";
+const BLUE = "#26352b"; // Verde carbón para header premium
 
 const getTheme = (mode) =>
   createTheme({
@@ -60,6 +60,7 @@ const getTheme = (mode) =>
         styleOverrides: {
           root: {
             backgroundColor: BLUE,
+            boxShadow: "0 10px 30px rgba(38,53,43,.18)",
           },
         },
       },
