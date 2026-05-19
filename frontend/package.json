@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "bootstrap": "^5.3.3",
@@ -31,6 +31,7 @@
     "vite": "^7.3.2"
   },
   "overrides": {
-    "esbuild": ">=0.24.3"
+    "esbuild": ">=0.24.3",
+    "ws": "^8.20.1"
   }
 }

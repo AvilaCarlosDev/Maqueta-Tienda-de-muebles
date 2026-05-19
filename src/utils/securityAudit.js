@@ -5,8 +5,6 @@
  * de seguridad y generar reportes.
  */
 
-import { securityLogger } from "./securityLogger";
-
 class SecurityAudit {
   constructor() {
     this.auditLogs = [];
